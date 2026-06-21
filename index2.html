@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Flop Tracker - Singapore Board</title>
+    <style>
+        :root {
+            --bg-color: #121824;
+            --card-bg: #1e2640;
+            --card-back-bg: #151b2d;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --accent-red: #ff4757;
+            --accent-green: #2ed573;
+            --accent-blue: #1e90ff;
+            
+            /* 3 Team Palette */
+            --team-a: #ffa502;   /* Yellow/Orange */
+            --team-b: #9b59b6;   /* Purple */
+            --team-c: #ff007f;   /* Neon Pink */
+
+            /* Region Border Colors */
+            --region-west: #ffa502;      
+            --region-north: #ff4757;     
+            --region-central: #1e90ff;   
+            --region-northeast: #2ed573; 
+            --region-east: #f1c40f;      
+            --region-sentosa: #a55eea;   
+            --region-wild: #ffffff;      
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        header { text-align: center; margin-bottom: 30px; }
+        header h1 { font-size: 2.5rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
+        header h1 span { color: var(--accent-red); }
+        header p { color: var(--text-muted); font-size: 1.1rem; }
+
+        /* 3-Team Scoreboard */
+        .scoreboard {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            flex-wrap: wrap;
+        }
+        .score-a { color: var(--team-a); }
+        .score-b { color: var(--team-b); }
+        .score-c { color: var(--team-c); }
+        .pool-count { color: var(--text-muted); border-left: 2px solid rgba(255,255,255,0.2); padding-left: 30px; }
+
+        /* Expanded 9-Card Grid Layout */
+        .district-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .flip-card { background-color: transparent; height: 460px; perspective: 1000px; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: left; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
+
+        .card-front { background-color: var(--card-bg); cursor: pointer; }
+        .map-container { width: 100%; height: 180px; background-color: #151b2d; display: flex; align-items: center; justify-content: center; overflow: hidden; border-bottom: 2px solid rgba(255, 255, 255, 0.1); }
+        .map-container img { width: 100%; height: 100%; object-fit: contain; padding: 10px; box-sizing: border-box; }
+
+        .card-content { padding: 20px; }
+        .card-content h2 { font-size: 1.3rem; margin: 10px 0 5px 0; text-transform: uppercase; }
+        
+        /* Region Text Rules */
+        .txt-west { color: var(--region-west); }
+        .txt-north { color: var(--region-north); }
+        .txt-central { color: var(--region-central); }
+        .txt-northeast { color: var(--region-northeast); }
+        .txt-east { color: var(--region-east); }
+        .txt-sentosa { color: var(--region-sentosa); }
+        .txt-wild { color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.6); }
+
+        .card-content p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin: 0; }
+
+        .badge-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+        .borders-badge { background-color: rgba(255, 255, 255, 0.15); color: #fff; font-size: 0.75rem; font-weight: bold; padding: 4px 8px; border-radius: 6px; }
+        .challenge-tag { background-color: var(--card-back-bg); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; max-width: 65%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* Back Card Layout Updates */
+        .card-back { background-color: var(--card-back-bg); transform: rotateY(180deg); padding: 24px; box-sizing: border-box; display: flex; flex-direction: column; border: 2px solid var(--accent-red); }
+        .border-west { border-color: var(--region-west); }
+        .border-north { border-color: var(--region-north); }
+        .border-central { border-color: var(--region-central); }
+        .border-northeast { border-color: var(--region-northeast); }
+        .border-east { border-color: var(--region-east); }
+        .border-sentosa { border-color: var(--region-sentosa); }
+        .border-wild { border-color: #fff; box-shadow: inset 0 0 10px rgba(255,255,255,0.1); }
+
+        .challenge-header { border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; margin-bottom: 15px; }
+        .challenge-title { font-size: 1.1rem; font-weight: bold; text-transform: uppercase; }
+
+        /* Unified Scrolling Task Box */
+        .challenge-body { font-size: 0.9rem; line-height: 1.6; flex-grow: 1; overflow-y: auto; margin-bottom: 15px; white-space: pre-wrap; color: var(--text-muted); }
+        .challenge-body strong { color: #fff; display: block; margin-bottom: 6px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .challenge-body::-webkit-scrollbar { width: 6px; }
+        .challenge-body::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
+        .challenge-body::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+
+        /* 3-Button Layout Configuration */
+        .button-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: auto; }
+        .team-btn { color: #fff; border: none; padding: 12px 2px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; text-align: center; }
+        .btn-a { background-color: var(--team-a); color: #121824; }
+        .btn-b { background-color: var(--team-b); }
+        .btn-c { background-color: var(--team-c); }
+        .team-btn:hover { opacity: 0.9; }
+
+        /* Fullscreen Scrolling Selector Popup Window */
+        .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-box { background: #1a2236; width: 90%; max-width: 450px; border-radius: 12px; padding: 25px; border: 2px solid var(--team-a); max-height: 80vh; display: flex; flex-direction: column; }
+        .modal-box h3 { margin-top: 0; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
+        .modal-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
+        .modal-scroll { flex-grow: 1; overflow-y: auto; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 6px; }
+        
+        .selection-row { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; }
+        .selection-row:hover { background: rgba(255,255,255,0.05); }
+        .selection-row input { transform: scale(1.2); cursor: pointer; }
+        .selection-row span { font-weight: bold; font-size: 0.95rem; }
+
+        .modal-confirm-btn { background: var(--accent-green); color: #fff; border: none; padding: 12px; width:100%; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; text-transform: uppercase; }
+        .modal-confirm-btn:disabled { background: #475569; cursor: not-allowed; opacity: 0.6; }
+
+        /* Histories Panel */
+        .history-section { max-width: 1400px; margin: 50px auto 0 auto; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        .history-box { background-color: #161d30; border-radius: 8px; padding: 20px; border-left: 4px solid var(--text-muted); }
+        .history-box.a-box { border-left-color: var(--team-a); }
+        .history-box.b-box { border-left-color: var(--team-b); }
+        .history-box.c-box { border-left-color: var(--team-c); }
+        .history-box h3 { margin: 0 0 10px 0; font-size: 1rem; text-transform: uppercase; }
+        .history-list { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
+
+        footer { margin-top: 50px; text-align: center; padding-bottom: 40px; }
+        .reset-btn { background-color: transparent; color: var(--accent-red); border: 2px solid var(--accent-red); padding: 10px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .reset-btn:hover { background-color: var(--accent-red); color: #fff; }
+
+        @media (max-width: 768px) {
+            .scoreboard { flex-direction: column; align-items: center; gap: 10px; }
+            .pool-count { border-left: none; padding-left: 0; }
+            .button-group { grid-template-columns: 1fr; }
+            .flip-card { height: 500px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>The Flop Tracker: <span>Singapore Board</span></h1>
+        <p>3 Teams • 9 Board Slots • Dynamic Wild Card Selector</p>
+    </header>
+
+    <div class="scoreboard">
+        <div class="score-a">Team A: <span id="scoreA">0</span></div>
+        <div class="score-b">Team B: <span id="scoreB">0</span></div>
+        <div class="score-c">Team C: <span id="scoreC">0</span></div>
+        <div class="pool-count">Remaining Pool: <span id="poolDeck">41</span> Districts</div>
+    </div>
+
+    <main class="district-grid" id="boardGrid"></main>
+
+    <section class="history-section">
+        <div class="history-box a-box">
+            <h3>Conquered by Team A</h3>
+            <div class="history-list" id="logA">None yet</div>
+        </div>
+        <div class="history-box b-box">
+            <h3>Conquered by Team B</h3>
+            <div class="history-list" id="logB">None yet</div>
+        </div>
+        <div class="history-box c-box">
+            <h3>Conquered by Team C</h3>
+            <div class="history-list" id="logC">None yet</div>
+        </div>
+    </section>
+
+    <!-- Scrolling Selection Modal Box -->
+    <div class="modal-overlay" id="selectionModal">
+        <div class="modal-box" id="modalBox">
+            <h3>Select 2 Districts</h3>
+            <p>Choose which 2 available map properties you want to claim instantly:</p>
+            <div class="modal-scroll" id="modalScrollPool"></div>
+            <button class="modal-confirm-btn" id="confirmClaimBtn" disabled onclick="submitWildSelections()">Confirm Claims</button>
+        </div>
+    </div>
+
+    <footer>
+        <button class="reset-btn" onclick="resetGame()">🔄 Reset Entire Game Board</button>
+    </footer>
+
+    <script>
+        // ========================================================
+        // 🛠️ DATA ARRAYS: 41 DISTRICTS (TASK CODES UPGRADED TO BACKTICKS)
+        // ========================================================
+        const allDistricts = [
+            // 🟠 WEST REGION
+            { id: "bukit-batok", name: "Bukit Batok", region: "west", borders: 6, description: "Characterised by its hilly terrain and lush green spaces. It is famous for Little Guilin (a beautiful, scenic park created from a disused granite quarry) and Bukit Batok Nature Park. It functions primarily as a peaceful, mature residential town.", image: "images/bukitbatok.png", challengeTitle: "On Time", task: `Find a bus departure that is on time.
+
+If the MyTransport app says a bus is arriving and that bus does not leave within 1 minute, the departure is not on time, and you have to redo the challenge. ` },
+            { id: "bukit-panjang", name: "Bukit Panjang", region: "west", borders: 5, description: "A quiet, suburban residential town tucked right next to the Central Catchment Area. It features unique hilly geography and was the first town in Singapore to implement the Light Rail Transit (LRT) system to seamlessly connect its residents to the main MRT network.", image: "images/bukitpanjang.png", challengeTitle: "Joyriding", task: `Take the entire Bukit Panjang Loop via Senja.
+
+Along the journey, you have to photograph a bicycle, a red car and a convenience shop. 
+
+You cannot get off the train to take a photo.` },
+            { id: "choa-chu-kang", name: "Choa Chu Kang", region: "west", borders: 5, description: "Located in the northwestern part of the region, this former kampong and farming area has evolved into a densely populated, self-contained residential town. It is highly family-oriented, featuring extensive park connectors and the newly upgraded Choa Chu Kang Park.  ", image: "images/choachukang.png", challengeTitle: "ITE West", task: `Proudly take a photo of ITE West.` },
+            { id: "clementi", name: "Clementi", region: "west", borders: 4, description: "A highly sought-after, mature residential town positioned between Jurong and the Central Region. Often dubbed an educational hub, it hosts the National University of Singapore (NUS), Ngee Ann Polytechnic, and numerous other prominent tertiary institutions. ", image: "images/clementi.png", challengeTitle: "Tertiary Education", task: `Clementi has the highest concentration of tertiary institutions in Singapore. Travel to 2 of them within 15 mins. The timer starts at the front of the first institute and ends once you arrive at the front of the next institute. 
+
+No coins are needed to complete this. You must redo this if you fail. ` },
+            { id: "jurong-east", name: "Jurong East", region: "west", borders: 5, description: "The official regional centre of the West. It is a bustling commercial hub packed with major shopping malls (like JEM and Westgate) and is central to the upcoming Jurong Lake District, which is being developed into Singapore's second Central Business District (CBD). It is also home to the scenic Jurong Lake Gardens.  ", image: "images/jurongeast.png", challengeTitle: "We Are Chinese People", task:`Find something Chinese-culture related and take a photo of it.` },
+            { id: "jurong-west", name: "Jurong West", region: "west", borders: 5, description: "The most populous residential planning area in the West Region. It is a massive, mature heartland town featuring extensive public housing estates, the sprawling Jurong Point shopping mall, and the prestigious Nanyang Technological University (NTU) campus nestled in its western corner.  ", image: "images/jurongwest.png", challengeTitle: "Housing", task: `Unlike it’s neighbour Pioneer, Jurong West is the most populated town in Singapore. Find and photograph two HDB blocks that are 700 numbers apart. E.g. Block 146 and Block 912. 
+
+You can travel for free to complete this challenge.` },
+            { id: "boon-lay", name: "Boon Lay", region: "west", borders: 3, description: "An area primarily dedicated to light industrial estates, corporate offices, and factories. It acts as a vital buffer zone separating the dense residential zones of Jurong West from the heavy industrial districts further out.  ", image: "images/boonlay.png", challengeTitle: "The Only Hill in the West", task: `Climb to the summit of Jurong Hill and take a photo at the top of the lookout tower.` },
+            { id: "pioneer", name: "Pioneer", region: "west", borders: 4, description: "Named after the early industrial visionaries of Singapore, this area is almost entirely industrial. It forms a major backbone of the Jurong industrial estate, filled with manufacturing plants, warehouses, and engineering facilities.", image: "images/pioneer.png", challengeTitle: "Where Am I?", task: `Pioneer is known for having all its land used only for industrial factories. Therefore you need to buy a meal/drink from a store (of any kind) outside of Joo Koon Mall.` },
+            { id: "tengah", name: "Tengah", region: "west", borders: 5, description: "Singapore’s newest, fully planned residential town. Known as the Forest Town, it is being built from scratch with a heavy focus on smart, car-lite, and sustainable living, featuring a massive 5km-long ecological forest corridor.  ", image: "images/tengah.png", challengeTitle: "Car Hunting", task: `Tengah was built to be car-lite which means there will be very little amount of cars. Hunt a white, red, yellow, silver, and blue car. ` },
+            { id: "tuas", name: "Tuas", region: "west", borders: 2, description: "Situated on the extreme western tip of Singapore, Tuas is a massive powerhouse for heavy industry, global shipping, and petrochemicals. It features massive land reclamation projects and is home to the mega Tuas Port, which is progressively opening to consolidate all of Singapore's container maritime operations.  ", image: "images/tuas.png", challengeTitle: "WHERE ARE THE BIKES", task: `Find a rental bicycle in Tuas.
+
+Any rental service can complete this challenge.` },
+            { id: "western-islands", name: "Western Water Catchment", region: "west", borders: 7, description: "The largest planning area by land size in the West, though it has almost no permanent resident population. It contains four major reservoirs (Tengeh, Poyan, Murai, and Sarimbun) and functions primarily as a crucial water catchment area and a restricted live-firing training ground for the Singapore Armed Forces.  ", image: "images/westernwatercatchment.png", challengeTitle: "Fresh Water", task: `Drink fresh tap water or fountain water.` },
+
+            // 🔴 NORTH REGION
+            { id: "woodlands", name: "Woodlands", region: "north", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "sembawang", name: "Sembawang", region: "north", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "yishun", name: "Yishun", region: "north", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "sungei-kadut", name: "Sungei Kadut", region: "north", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "mandai", name: "Mandai", region: "north", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "lim-chu-kang", name: "Lim Chu Kang", region: "north", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "simpang", name: "Simpang", region: "north", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "central-catchment", name: "Central Water Catchment", region: "north", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+
+            // 🔵 CENTRAL REGION
+            { id: "bishan", name: "Bishan", region: "central", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "bukit-merah", name: "Bukit Merah", region: "central", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "bukit-timah", name: "Bukit Timah", region: "central", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "cbd", name: "Central Business District", region: "central", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "geylang", name: "Geylang", region: "central", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "kallang", name: "Kallang", region: "central", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "marine-parade", name: "Marine Parade", region: "central", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "novena", name: "Novena", region: "central", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "queenstown", name: "Queenstown", region: "central", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "tanglin", name: "Tanglin", region: "central", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "toa-payoh", name: "Toa Payoh", region: "central", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+
+            // 🟢 NORTHEAST REGION
+            { id: "ang-mo-kio", name: "Ang Mo Kio", region: "northeast", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "hougang", name: "Hougang", region: "northeast", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "punggol", name: "Punggol", region: "northeast", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "sengkang", name: "Sengkang", region: "northeast", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "serangoon", name: "Serangoon", region: "northeast", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "seletar", name: "Seletar", region: "northeast", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+
+            // 🟡 EAST REGION
+            { id: "bedok", name: "Bedok", region: "east", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "changi", name: "Changi", region: "east", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "pasir-ris", name: "Pasir Ris", region: "east", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "paya-lebar", name: "Paya Lebar", region: "east", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+            { id: "tampines", name: "Tampines", region: "east", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` },
+
+            // 🟣 SENTOSA
+            { id: "sentosa-island", name: "Sentosa Island", region: "sentosa", borders: 0, description: "something", image: "images/placeholder.png", challengeTitle: "something", task: `something` }
+        ];
+
+        // ⚡ ISOLATED WILD CARD ENGINE POOL
+        const wildCards = [
+            { id: "wild-1", name: "✨ WILD CARD", region: "wild", borders: 0, description: "Complete the challenge below to claim 2 districts of your choice!", image: "images/wild.png", challengeTitle: "Double Claim: Choice A", task: `something` },
+            { id: "wild-2", name: "✨ WILD CARD", region: "wild", borders: 0, description: "Complete the challenge below to claim 2 districts of your choice!", image: "images/wild.png", challengeTitle: "Double Claim: Choice B", task: `something` },
+            { id: "wild-3", name: "✨ WILD CARD", region: "wild", borders: 0, description: "Complete the challenge below to claim 2 districts of your choice!", image: "images/wild.png", challengeTitle: "Double Claim: Choice C", task: `something` },
+            { id: "wild-4", name: "✨ WILD CARD", region: "wild", borders: 0, description: "Complete the challenge below to claim 2 districts of your choice!", image: "images/wild.png", challengeTitle: "Double Claim: Choice D", task: `something` }
+        ];
+
+        // ENGINE SYSTEM STATE VARIABLES
+        let activeCards = [];
+        let aCompleted = [];
+        let bCompleted = [];
+        let cCompleted = [];
+        let unplayedDistricts = [];
+        let unplayedWilds = [];
+
+        let currentWildCardId = null;
+        let currentWildDOMElement = null;
+        let currentWildTeam = null;
+
+        function loadGameState() {
+            const savedActive = localStorage.getItem('sglag3_act');
+            const savedA = localStorage.getItem('sglag3_a');
+            const savedB = localStorage.getItem('sglag3_b');
+            const savedC = localStorage.getItem('sglag3_c');
+            const savedWildDeck = localStorage.getItem('sglag3_wld');
+
+            if (savedActive && savedA && savedB && savedC && savedWildDeck) {
+                activeCards = JSON.parse(savedActive);
+                aCompleted = JSON.parse(savedA);
+                bCompleted = JSON.parse(savedB);
+                cCompleted = JSON.parse(savedC);
+                unplayedWilds = JSON.parse(savedWildDeck);
+                
+                const allCompleted = [...aCompleted, ...bCompleted, ...cCompleted];
+                unplayedDistricts = allDistricts.filter(d => 
+                    !allCompleted.includes(d.id) && 
+                    !activeCards.some(active => active.id === d.id)
+                );
+            } else {
+                aCompleted = [];
+                bCompleted = [];
+                cCompleted = [];
+                unplayedDistricts = [...allDistricts];
+                unplayedWilds = [...wildCards];
+                activeCards = [];
+
+                let tempDeck = [...unplayedDistricts];
+                unplayedWilds.forEach(w => tempDeck.push(w));
+
+                for (let i = 0; i < 9; i++) {
+                    if (tempDeck.length === 0) break;
+                    const randomIndex = Math.floor(Math.random() * tempDeck.length);
+                    const card = tempDeck.splice(randomIndex, 1)[0];
+                    activeCards.push(card);
+                    
+                    if (card.region === 'wild') {
+                        unplayedWilds = unplayedWilds.filter(w => w.id !== card.id);
+                    } else {
+                        unplayedDistricts = unplayedDistricts.filter(d => d.id !== card.id);
+                    }
+                }
+                saveToLocalStorage();
+            }
+
+            renderBoard();
+        }
+
+        function renderBoard() {
+            const boardGrid = document.getElementById('boardGrid');
+            boardGrid.innerHTML = ''; 
+
+            activeCards.forEach(cardData => {
+                const cardHTML = createCardElement(cardData);
+                boardGrid.appendChild(cardHTML);
+            });
+
+            updateStats();
+        }
+
+        function createCardElement(data) {
+            const cardEl = document.createElement('div');
+            cardEl.className = 'flip-card';
+            cardEl.setAttribute('data-id', data.id);
+            
+            const isWild = (data.region === 'wild');
+            const topBadgeText = isWild ? `⚡ EVENT` : `🌐 Borders: ${data.borders}`;
+            const headerColorStyle = isWild ? `style="color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.8);"` : `style="color: var(--region-${data.region})"`;
+
+            cardEl.innerHTML = `
+                <div class="flip-card-inner">
+                    <div class="card-front" onclick="toggleFlip(this.parentElement.parentElement)">
+                        <div class="map-container">
+                            <img src="${data.image}" alt="${data.name} Graphic">
+                        </div>
+                        <div class="card-content">
+                            <div class="badge-row">
+                                <span class="borders-badge">${topBadgeText}</span>
+                                <span class="challenge-tag" title="${data.challengeTitle}">${data.challengeTitle}</span>
+                            </div>
+                            <h2 class="txt-${data.region}">${data.name}</h2>
+                            <p>${data.description}</p>
+                        </div>
+                    </div>
+                    <div class="card-back border-${data.region}">
+                        <div class="challenge-header">
+                            <div class="challenge-title" ${headerColorStyle}>🃏 ${data.challengeTitle}</div>
+                        </div>
+                        <div class="challenge-body">
+                            <strong>The Challenge:</strong>
+                            ${data.task}
+                        </div>
+                        <div class="button-group">
+                            <button class="team-btn btn-a" onclick="handleClaimClick('${data.id}', 'a', this.parentElement.parentElement.parentElement.parentElement, event)">Team A</button>
+                            <button class="team-btn btn-b" onclick="handleClaimClick('${data.id}', 'b', this.parentElement.parentElement.parentElement.parentElement, event)">Team B</button>
+                            <button class="team-btn btn-c" onclick="handleClaimClick('${data.id}', 'c', this.parentElement.parentElement.parentElement.parentElement, event)">Team C</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return cardEl;
+        }
+
+        function toggleFlip(cardElement) {
+            cardElement.classList.toggle('flipped');
+        }
+
+        function handleClaimClick(id, team, cardElement, event) {
+            if (event && event.stopPropagation) { event.stopPropagation(); } 
+            else if (window.event) { window.event.cancelBubble = true; }
+
+            const targetCard = activeCards.find(c => c.id === id);
+            
+            if (targetCard.region === 'wild') {
+                currentWildCardId = id;
+                currentWildDOMElement = cardElement;
+                currentWildTeam = team;
+                openSelectionModal();
+            } else {
+                executeStandardCompletion(id, team, cardElement);
+            }
+        }
+
+        function executeStandardCompletion(id, team, cardElement) {
+            if (team === 'a') aCompleted.push(id);
+            else if (team === 'b') bCompleted.push(id);
+            else if (team === 'c') cCompleted.push(id);
+            
+            activeCards = activeCards.filter(c => c.id !== id);
+
+            cardElement.style.transition = 'all 0.4s ease';
+            cardElement.style.opacity = '0';
+            cardElement.style.transform = 'scale(0.8)';
+            
+            setTimeout(() => {
+                cardElement.remove();
+                drawNextReplacementCard();
+            }, 400);
+        }
+
+        function openSelectionModal() {
+            const container = document.getElementById('modalScrollPool');
+            const confirmBtn = document.getElementById('confirmClaimBtn');
+            const modalBox = document.getElementById('modalBox');
+            
+            container.innerHTML = '';
+            confirmBtn.disabled = true;
+            modalBox.style.borderColor = `var(--team-${currentWildTeam})`;
+
+            const eligibleChoices = unplayedDistricts.filter(d => !activeCards.some(a => a.id === d.id));
+
+            if (eligibleChoices.length === 0) {
+                container.innerHTML = '<div style="color:var(--text-muted); padding:10px;">No remaining districts to claim!</div>';
+                confirmBtn.disabled = false;
+                confirmBtn.innerText = "Dismiss Wild Card";
+                return;
+            } else {
+                confirmBtn.innerText = "Confirm Claims";
+            }
+
+            eligibleChoices.forEach(dist => {
+                const row = document.createElement('label');
+                row.className = 'selection-row';
+                row.innerHTML = `
+                    <span class="txt-${dist.region}">${dist.name}</span>
+                    <input type="checkbox" value="${dist.id}" onchange="validateSelectionCheckboxes()">
+                `;
+                container.appendChild(row);
+            });
+
+            document.getElementById('selectionModal').style.display = 'flex';
+        }
+
+        function validateSelectionCheckboxes() {
+            const checked = document.querySelectorAll('#modalScrollPool input[type="checkbox"]:checked');
+            const confirmBtn = document.getElementById('confirmClaimBtn');
+            
+            if (checked.length === 2) {
+                confirmBtn.disabled = false;
+                document.querySelectorAll('#modalScrollPool input[type="checkbox"]:not(:checked)').forEach(cb => cb.disabled = true);
+            } else {
+                confirmBtn.disabled = true;
+                document.querySelectorAll('#modalScrollPool input[type="checkbox"]').forEach(cb => cb.disabled = false);
+            }
+        }
+
+        function submitWildSelections() {
+            const checked = document.querySelectorAll('#modalScrollPool input[type="checkbox"]:checked');
+            
+            checked.forEach(cb => {
+                const distId = cb.value;
+                if (currentWildTeam === 'a') aCompleted.push(distId);
+                else if (currentWildTeam === 'b') bCompleted.push(distId);
+                else if (currentWildTeam === 'c') cCompleted.push(distId);
+                
+                unplayedDistricts = unplayedDistricts.filter(d => d.id !== distId);
+            });
+
+            activeCards = activeCards.filter(c => c.id !== currentWildCardId);
+            currentWildDOMElement.style.transition = 'all 0.4s ease';
+            currentWildDOMElement.style.opacity = '0';
+            currentWildDOMElement.style.transform = 'scale(0.8)';
+
+            document.getElementById('selectionModal').style.display = 'none';
+
+            setTimeout(() => {
+                currentWildDOMElement.remove();
+                drawNextReplacementCard();
+            }, 400);
+        }
+
+        function drawNextReplacementCard() {
+            let replacementPool = [...unplayedDistricts, ...unplayedWilds];
+
+            if (replacementPool.length > 0) {
+                const randomIndex = Math.floor(Math.random() * replacementPool.length);
+                const nextCard = replacementPool.splice(randomIndex, 1)[0];
+                activeCards.push(nextCard);
+
+                if (nextCard.region === 'wild') {
+                    unplayedWilds = unplayedWilds.filter(w => w.id !== nextCard.id);
+                } else {
+                    unplayedDistricts = unplayedDistricts.filter(d => d.id !== nextCard.id);
+                }
+
+                const newCardEl = createCardElement(nextCard);
+                newCardEl.style.opacity = '0';
+                document.getElementById('boardGrid').appendChild(newCardEl);
+                
+                setTimeout(() => {
+                    newCardEl.style.transition = 'all 0.4s ease';
+                    newCardEl.style.opacity = '1';
+                }, 50);
+            }
+
+            saveToLocalStorage();
+            updateStats();
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('sglag3_act', JSON.stringify(activeCards));
+            localStorage.setItem('sglag3_a', JSON.stringify(aCompleted));
+            localStorage.setItem('sglag3_b', JSON.stringify(bCompleted));
+            localStorage.setItem('sglag3_c', JSON.stringify(cCompleted));
+            localStorage.setItem('sglag3_wld', JSON.stringify(unplayedWilds));
+        }
+
+        function updateStats() {
+            document.getElementById('scoreA').innerText = aCompleted.length;
+            document.getElementById('scoreB').innerText = bCompleted.length;
+            document.getElementById('scoreC').innerText = cCompleted.length;
+
+            const activeDistrictCount = activeCards.filter(c => c.region !== 'wild').length;
+            const totalRemainingDistricts = unplayedDistricts.length + activeDistrictCount;
+            document.getElementById('poolDeck').innerText = totalRemainingDistricts;
+
+            const getNames = (idList) => {
+                const list = idList.map(id => {
+                    const found = allDistricts.find(d => d.id === id);
+                    return found ? found.name : id;
+                });
+                return list.length > 0 ? list.join(', ') : 'None yet';
+            };
+
+            document.getElementById('logA').innerText = getNames(aCompleted);
+            document.getElementById('logB').innerText = getNames(bCompleted);
+            document.getElementById('logC').innerText = getNames(cCompleted);
+        }
+
+        function resetGame() {
+            if (confirm("Reset the scores and wipe the entire 3-team layout? This action cannot be undone.")) {
+                localStorage.removeItem('sglag3_act');
+                localStorage.removeItem('sglag3_a');
+                localStorage.removeItem('sglag3_b');
+                localStorage.removeItem('sglag3_c');
+                localStorage.removeItem('sglag3_wld');
+                loadGameState();
+            }
+        }
+
+        window.onload = loadGameState;
+    </script>
+</body>
+</html>
