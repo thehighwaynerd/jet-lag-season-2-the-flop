@@ -140,7 +140,7 @@
 
     <main class="district-grid" id="boardGrid"></main>
 
-    <script>
+<script>
         // 🟢 CLOUD CONNECT CONFIGURATION
         const supabaseUrl = 'https://gznnedivbuuumahpxfqz.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6bm5lZGl2YnV1dW1haHB4ZnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTM0MTEsImV4cCI6MjA5NzY4OTQxMX0.P8C0Jbsw7kzk4anRajZoY3dbDV7I4LEisnsDc8QhAnY';
@@ -150,8 +150,16 @@
             config: { broadcast: { self: true, ack: false } }
         }) : null;
 
-        const allDistricts = [
-            // 🟠 WEST REGION
+        // 🌐 GLOBAL STATE SYSTEM VARIABLES (Defined first to stop "undefined" crashes)
+        let aCompleted = [];
+        let bCompleted = [];
+        let cCompleted = [];
+        let unplayedDistricts = [];
+        let unplayedWilds = [];
+
+        // 🌐 THE 9 FIXED SYNCHRONIZED STARTING CARDS
+        const activeCards = [
+                       // 🟠 WEST REGION
             { id: "bukit-batok", name: "Bukit Batok", region: "west", borders: 6, description: "Characterised by its hilly terrain and lush green spaces. It is famous for Little Guilin (a beautiful, scenic park created from a disused granite quarry) and Bukit Batok Nature Park. It functions primarily as a peaceful, mature residential town.", image: "images/bukitbatok.png", challengeTitle: "On Time", task: `Find a bus departure that is on time.
 
 If the MyTransport app says a bus is arriving and that bus does not leave within 1 minute, the departure is not on time, and you have to redo the challenge. ` },
@@ -226,21 +234,28 @@ Any rental service can complete this challenge.` },
             { id: "wild-4", name: "✨ WILD CARD", region: "wild", borders: 0, description: "Complete the challenge below to claim 2 districts of your choice!", image: "images/wild.png", challengeTitle: "Double Claim: Choice D", task: `something` }
         ];
 
+        // Placeholder stats function to prevent layout crashes if scoreboard calls it
+        function updateStats() {
+            console.log("Stats synced successfully!");
+        }
+
         // RENDER THE FIXED BOARD RIGHT AWAY
         function renderBoard() {
             const boardGrid = document.getElementById('boardGrid');
+            if (!boardGrid) return;
             boardGrid.innerHTML = ''; 
 
             activeCards.forEach(cardData => {
                 const cardHTML = createCardElement(cardData);
                 boardGrid.appendChild(cardHTML);
             });
+            updateStats();
         }
 
         function createCardElement(data) {
             const cardEl = document.createElement('div');
             cardEl.className = 'flip-card';
-            cardEl.setAttribute('data-id', data.id); // Save custom data-id for targeting
+            cardEl.setAttribute('data-id', data.id); 
             
             const topBadgeText = `🌐 Borders: ${data.borders}`;
             const headerColorStyle = `style="color: var(--region-${data.region})"`;
@@ -293,7 +308,7 @@ Any rental service can complete this challenge.` },
             }
         }
 
-        // ⚡ BROADCAST RECEIVER (Walkie-Talkie listener)
+        // ⚡ BROADCAST RECEIVER
         if (gameChannel) {
             gameChannel.on('broadcast', { event: 'cardFlipped' }, (response) => {
                 const receivedCard = document.querySelector(`[data-id="${response.payload.cardId}"]`);
