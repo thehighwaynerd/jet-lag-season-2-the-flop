@@ -16,7 +16,7 @@
             --accent-green: #2ed573;
             --accent-blue: #1e90ff;
             
-            /* 3 Team Palette */
+            /* Team Palette */
             --team-a: #ffa502;   /* Yellow/Orange */
             --team-b: #9b59b6;   /* Purple */
             --team-c: #ff007f;   /* Neon Pink */
@@ -44,7 +44,6 @@
         header h1 span { color: var(--accent-red); }
         header p { color: var(--text-muted); font-size: 1.1rem; }
 
-        /* 3-Team Scoreboard */
         .scoreboard {
             display: flex;
             justify-content: center;
@@ -61,7 +60,6 @@
         .score-c { color: var(--team-c); }
         .pool-count { color: var(--text-muted); border-left: 2px solid rgba(255,255,255,0.2); padding-left: 30px; }
 
-        /* Expanded 9-Card Grid Layout */
         .district-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -82,7 +80,6 @@
         .card-content { padding: 20px; }
         .card-content h2 { font-size: 1.3rem; margin: 10px 0 5px 0; text-transform: uppercase; }
         
-        /* Region Text Rules */
         .txt-west { color: var(--region-west); }
         .txt-north { color: var(--region-north); }
         .txt-central { color: var(--region-central); }
@@ -97,7 +94,6 @@
         .borders-badge { background-color: rgba(255, 255, 255, 0.15); color: #fff; font-size: 0.75rem; font-weight: bold; padding: 4px 8px; border-radius: 6px; }
         .challenge-tag { background-color: var(--card-back-bg); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; max-width: 65%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Back Card Layout Updates */
         .card-back { background-color: var(--card-back-bg); transform: rotateY(180deg); padding: 24px; box-sizing: border-box; display: flex; flex-direction: column; border: 2px solid var(--accent-red); }
         .border-west { border-color: var(--region-west); }
         .border-north { border-color: var(--region-north); }
@@ -110,48 +106,16 @@
         .challenge-header { border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; margin-bottom: 15px; }
         .challenge-title { font-size: 1.1rem; font-weight: bold; text-transform: uppercase; }
 
-        /* Unified Scrolling Task Box */
         .challenge-body { font-size: 0.9rem; line-height: 1.6; flex-grow: 1; overflow-y: auto; margin-bottom: 15px; white-space: pre-wrap; color: var(--text-muted); }
         .challenge-body strong { color: #fff; display: block; margin-bottom: 6px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        .challenge-body::-webkit-scrollbar { width: 6px; }
-        .challenge-body::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
-        .challenge-body::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
 
-        /* 3-Button Layout Configuration */
         .button-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: auto; }
         .team-btn { color: #fff; border: none; padding: 12px 2px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; text-align: center; }
         .btn-a { background-color: var(--team-a); color: #121824; }
         .btn-b { background-color: var(--team-b); }
         .btn-c { background-color: var(--team-c); }
-        .team-btn:hover { opacity: 0.9; }
-
-        /* Fullscreen Scrolling Selector Popup Window */
-        .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; }
-        .modal-box { background: #1a2236; width: 90%; max-width: 450px; border-radius: 12px; padding: 25px; border: 2px solid var(--team-a); max-height: 80vh; display: flex; flex-direction: column; }
-        .modal-box h3 { margin-top: 0; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
-        .modal-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
-        .modal-scroll { flex-grow: 1; overflow-y: auto; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 6px; }
         
-        .selection-row { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; }
-        .selection-row:hover { background: rgba(255,255,255,0.05); }
-        .selection-row input { transform: scale(1.2); cursor: pointer; }
-        .selection-row span { font-weight: bold; font-size: 0.95rem; }
-
-        .modal-confirm-btn { background: var(--accent-green); color: #fff; border: none; padding: 12px; width:100%; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; text-transform: uppercase; }
-        .modal-confirm-btn:disabled { background: #475569; cursor: not-allowed; opacity: 0.6; }
-
-        /* Histories Panel */
-        .history-section { max-width: 1400px; margin: 50px auto 0 auto; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .history-box { background-color: #161d30; border-radius: 8px; padding: 20px; border-left: 4px solid var(--text-muted); }
-        .history-box.a-box { border-left-color: var(--team-a); }
-        .history-box.b-box { border-left-color: var(--team-b); }
-        .history-box.c-box { border-left-color: var(--team-c); }
-        .history-box h3 { margin: 0 0 10px 0; font-size: 1rem; text-transform: uppercase; }
-        .history-list { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
-
         footer { margin-top: 50px; text-align: center; padding-bottom: 40px; }
-        .reset-btn { background-color: transparent; color: var(--accent-red); border: 2px solid var(--accent-red); padding: 10px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        .reset-btn:hover { background-color: var(--accent-red); color: #fff; }
 
         @media (max-width: 768px) {
             .scoreboard { flex-direction: column; align-items: center; gap: 10px; }
@@ -165,60 +129,27 @@
 
     <header>
         <h1>The Flop Tracker: <span>Singapore Board</span></h1>
-        <p>3 Teams • 9 Board Slots • Dynamic Wild Card Selector</p>
+        <p>3 Teams • 9 Synchronized Board Slots</p>
     </header>
 
     <div class="scoreboard">
         <div class="score-a">Team A: <span id="scoreA">0</span></div>
         <div class="score-b">Team B: <span id="scoreB">0</span></div>
         <div class="score-c">Team C: <span id="scoreC">0</span></div>
-        <div class="pool-count">Remaining Pool: <span id="poolDeck">41</span> Districts</div>
     </div>
 
     <main class="district-grid" id="boardGrid"></main>
 
-    <section class="history-section">
-        <div class="history-box a-box">
-            <h3>Conquered by Team A</h3>
-            <div class="history-list" id="logA">None yet</div>
-        </div>
-        <div class="history-box b-box">
-            <h3>Conquered by Team B</h3>
-            <div class="history-list" id="logB">None yet</div>
-        </div>
-        <div class="history-box c-box">
-            <h3>Conquered by Team C</h3>
-            <div class="history-list" id="logC">None yet</div>
-        </div>
-    </section>
-
-    <!-- Scrolling Selection Modal Box -->
-    <div class="modal-overlay" id="selectionModal">
-        <div class="modal-box" id="modalBox">
-            <h3>Select 2 Districts</h3>
-            <p>Choose which 2 available map properties you want to claim instantly:</p>
-            <div class="modal-scroll" id="modalScrollPool"></div>
-            <button class="modal-confirm-btn" id="confirmClaimBtn" disabled onclick="submitWildSelections()">Confirm Claims</button>
-        </div>
-    </div>
-
-    <footer>
-        <button class="reset-btn" onclick="resetGame()">🔄 Reset Entire Game Board</button>
-    </footer>
-
     <script>
-const supabaseUrl = 'https://gznnedivbuuumahpxfqz.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6bm5lZGl2YnV1dW1haHB4ZnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTM0MTEsImV4cCI6MjA5NzY4OTQxMX0.P8C0Jbsw7kzk4anRajZoY3dbDV7I4LEisnsDc8QhAnY';
-const supabaseInstance = supabaseUrl && supabaseKey ? supabase.createClient(supabaseUrl, supabaseKey) : null;
+        // 🟢 CLOUD CONNECT CONFIGURATION
+        const supabaseUrl = 'https://gznnedivbuuumahpxfqz.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6bm5lZGl2YnV1dW1haHB4ZnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTM0MTEsImV4cCI6MjA5NzY4OTQxMX0.P8C0Jbsw7kzk4anRajZoY3dbDV7I4LEisnsDc8QhAnY';
+        const supabaseInstance = supabaseUrl && supabaseKey ? supabase.createClient(supabaseUrl, supabaseKey) : null;
+        
+        const gameChannel = supabaseInstance ? supabaseInstance.channel('singapore-flop-room', {
+            config: { broadcast: { self: true, ack: false } }
+        }) : null;
 
-// 🟢 FORCE CONFIG: This tells Supabase to allow client-to-client broadcasting!
-const gameChannel = supabaseInstance ? supabaseInstance.channel('singapore-flop-room', {
-    config: {
-        broadcast: { self: true, ack: false }
-    }
-}) : null;        // ========================================================
-        // 🛠️ DATA ARRAYS: 41 DISTRICTS (TASK CODES UPGRADED TO BACKTICKS)
-        // ========================================================
         const allDistricts = [
             // 🟠 WEST REGION
             { id: "bukit-batok", name: "Bukit Batok", region: "west", borders: 6, description: "Characterised by its hilly terrain and lush green spaces. It is famous for Little Guilin (a beautiful, scenic park created from a disused granite quarry) and Bukit Batok Nature Park. It functions primarily as a peaceful, mature residential town.", image: "images/bukitbatok.png", challengeTitle: "On Time", task: `Find a bus departure that is on time.
@@ -295,66 +226,7 @@ Any rental service can complete this challenge.` },
             { id: "wild-4", name: "✨ WILD CARD", region: "wild", borders: 0, description: "Complete the challenge below to claim 2 districts of your choice!", image: "images/wild.png", challengeTitle: "Double Claim: Choice D", task: `something` }
         ];
 
-        // ENGINE SYSTEM STATE VARIABLES
-        let activeCards = [];
-        let aCompleted = [];
-        let bCompleted = [];
-        let cCompleted = [];
-        let unplayedDistricts = [];
-        let unplayedWilds = [];
-
-        let currentWildCardId = null;
-        let currentWildDOMElement = null;
-        let currentWildTeam = null;
-
-        function loadGameState() {
-            const savedActive = localStorage.getItem('sglag3_act');
-            const savedA = localStorage.getItem('sglag3_a');
-            const savedB = localStorage.getItem('sglag3_b');
-            const savedC = localStorage.getItem('sglag3_c');
-            const savedWildDeck = localStorage.getItem('sglag3_wld');
-
-            if (savedActive && savedA && savedB && savedC && savedWildDeck) {
-                activeCards = JSON.parse(savedActive);
-                aCompleted = JSON.parse(savedA);
-                bCompleted = JSON.parse(savedB);
-                cCompleted = JSON.parse(savedC);
-                unplayedWilds = JSON.parse(savedWildDeck);
-                
-                const allCompleted = [...aCompleted, ...bCompleted, ...cCompleted];
-                unplayedDistricts = allDistricts.filter(d => 
-                    !allCompleted.includes(d.id) && 
-                    !activeCards.some(active => active.id === d.id)
-                );
-            } else {
-                aCompleted = [];
-                bCompleted = [];
-                cCompleted = [];
-                unplayedDistricts = [...allDistricts];
-                unplayedWilds = [...wildCards];
-                activeCards = [];
-
-                let tempDeck = [...unplayedDistricts];
-                unplayedWilds.forEach(w => tempDeck.push(w));
-
-                for (let i = 0; i < 9; i++) {
-                    if (tempDeck.length === 0) break;
-                    const randomIndex = Math.floor(Math.random() * tempDeck.length);
-                    const card = tempDeck.splice(randomIndex, 1)[0];
-                    activeCards.push(card);
-                    
-                    if (card.region === 'wild') {
-                        unplayedWilds = unplayedWilds.filter(w => w.id !== card.id);
-                    } else {
-                        unplayedDistricts = unplayedDistricts.filter(d => d.id !== card.id);
-                    }
-                }
-                saveToLocalStorage();
-            }
-
-            renderBoard();
-        }
-
+        // RENDER THE FIXED BOARD RIGHT AWAY
         function renderBoard() {
             const boardGrid = document.getElementById('boardGrid');
             boardGrid.innerHTML = ''; 
@@ -363,18 +235,15 @@ Any rental service can complete this challenge.` },
                 const cardHTML = createCardElement(cardData);
                 boardGrid.appendChild(cardHTML);
             });
-
-            updateStats();
         }
 
         function createCardElement(data) {
             const cardEl = document.createElement('div');
             cardEl.className = 'flip-card';
-            cardEl.setAttribute('data-id', data.id);
+            cardEl.setAttribute('data-id', data.id); // Save custom data-id for targeting
             
-            const isWild = (data.region === 'wild');
-            const topBadgeText = isWild ? `⚡ EVENT` : `🌐 Borders: ${data.borders}`;
-            const headerColorStyle = isWild ? `style="color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.8);"` : `style="color: var(--region-${data.region})"`;
+            const topBadgeText = `🌐 Borders: ${data.borders}`;
+            const headerColorStyle = `style="color: var(--region-${data.region})"`;
 
             cardEl.innerHTML = `
                 <div class="flip-card-inner">
@@ -400,9 +269,9 @@ Any rental service can complete this challenge.` },
                             ${data.task}
                         </div>
                         <div class="button-group">
-                            <button class="team-btn btn-a" onclick="handleClaimClick('${data.id}', 'a', this.parentElement.parentElement.parentElement.parentElement, event)">Team A</button>
-                            <button class="team-btn btn-b" onclick="handleClaimClick('${data.id}', 'b', this.parentElement.parentElement.parentElement.parentElement, event)">Team B</button>
-                            <button class="team-btn btn-c" onclick="handleClaimClick('${data.id}', 'c', this.parentElement.parentElement.parentElement.parentElement, event)">Team C</button>
+                            <button class="team-btn btn-a">Team A</button>
+                            <button class="team-btn btn-b">Team B</button>
+                            <button class="team-btn btn-c">Team C</button>
                         </div>
                     </div>
                 </div>
@@ -410,206 +279,32 @@ Any rental service can complete this challenge.` },
             return cardEl;
         }
 
-function toggleFlip(cardElement) {
-    cardElement.classList.toggle('flipped');
+        // ⚡ BROADCAST SENDER
+        function toggleFlip(cardElement) {
+            cardElement.classList.toggle('flipped');
+            const cardId = cardElement.getAttribute('data-id');
 
-    // Read the custom 'data-id' attribute instead of .id
-    const cardId = cardElement.getAttribute('data-id');
-
-    // Send the flip event to the cloud walkie-talkie!
-    if (gameChannel && cardId) {
-        gameChannel.send({
-            type: 'broadcast',
-            event: 'cardFlipped',
-            payload: { cardId: cardId }
-        });
-    }
-}
-        function handleClaimClick(id, team, cardElement, event) {
-            if (event && event.stopPropagation) { event.stopPropagation(); } 
-            else if (window.event) { window.event.cancelBubble = true; }
-
-            const targetCard = activeCards.find(c => c.id === id);
-            
-            if (targetCard.region === 'wild') {
-                currentWildCardId = id;
-                currentWildDOMElement = cardElement;
-                currentWildTeam = team;
-                openSelectionModal();
-            } else {
-                executeStandardCompletion(id, team, cardElement);
-            }
-        }
-
-        function executeStandardCompletion(id, team, cardElement) {
-            if (team === 'a') aCompleted.push(id);
-            else if (team === 'b') bCompleted.push(id);
-            else if (team === 'c') cCompleted.push(id);
-            
-            activeCards = activeCards.filter(c => c.id !== id);
-
-            cardElement.style.transition = 'all 0.4s ease';
-            cardElement.style.opacity = '0';
-            cardElement.style.transform = 'scale(0.8)';
-            
-            setTimeout(() => {
-                cardElement.remove();
-                drawNextReplacementCard();
-            }, 400);
-        }
-
-        function openSelectionModal() {
-            const container = document.getElementById('modalScrollPool');
-            const confirmBtn = document.getElementById('confirmClaimBtn');
-            const modalBox = document.getElementById('modalBox');
-            
-            container.innerHTML = '';
-            confirmBtn.disabled = true;
-            modalBox.style.borderColor = `var(--team-${currentWildTeam})`;
-
-            const eligibleChoices = unplayedDistricts.filter(d => !activeCards.some(a => a.id === d.id));
-
-            if (eligibleChoices.length === 0) {
-                container.innerHTML = '<div style="color:var(--text-muted); padding:10px;">No remaining districts to claim!</div>';
-                confirmBtn.disabled = false;
-                confirmBtn.innerText = "Dismiss Wild Card";
-                return;
-            } else {
-                confirmBtn.innerText = "Confirm Claims";
-            }
-
-            eligibleChoices.forEach(dist => {
-                const row = document.createElement('label');
-                row.className = 'selection-row';
-                row.innerHTML = `
-                    <span class="txt-${dist.region}">${dist.name}</span>
-                    <input type="checkbox" value="${dist.id}" onchange="validateSelectionCheckboxes()">
-                `;
-                container.appendChild(row);
-            });
-
-            document.getElementById('selectionModal').style.display = 'flex';
-        }
-
-        function validateSelectionCheckboxes() {
-            const checked = document.querySelectorAll('#modalScrollPool input[type="checkbox"]:checked');
-            const confirmBtn = document.getElementById('confirmClaimBtn');
-            
-            if (checked.length === 2) {
-                confirmBtn.disabled = false;
-                document.querySelectorAll('#modalScrollPool input[type="checkbox"]:not(:checked)').forEach(cb => cb.disabled = true);
-            } else {
-                confirmBtn.disabled = true;
-                document.querySelectorAll('#modalScrollPool input[type="checkbox"]').forEach(cb => cb.disabled = false);
-            }
-        }
-
-        function submitWildSelections() {
-            const checked = document.querySelectorAll('#modalScrollPool input[type="checkbox"]:checked');
-            
-            checked.forEach(cb => {
-                const distId = cb.value;
-                if (currentWildTeam === 'a') aCompleted.push(distId);
-                else if (currentWildTeam === 'b') bCompleted.push(distId);
-                else if (currentWildTeam === 'c') cCompleted.push(distId);
-                
-                unplayedDistricts = unplayedDistricts.filter(d => d.id !== distId);
-            });
-
-            activeCards = activeCards.filter(c => c.id !== currentWildCardId);
-            currentWildDOMElement.style.transition = 'all 0.4s ease';
-            currentWildDOMElement.style.opacity = '0';
-            currentWildDOMElement.style.transform = 'scale(0.8)';
-
-            document.getElementById('selectionModal').style.display = 'none';
-
-            setTimeout(() => {
-                currentWildDOMElement.remove();
-                drawNextReplacementCard();
-            }, 400);
-        }
-
-        function drawNextReplacementCard() {
-            let replacementPool = [...unplayedDistricts, ...unplayedWilds];
-
-            if (replacementPool.length > 0) {
-                const randomIndex = Math.floor(Math.random() * replacementPool.length);
-                const nextCard = replacementPool.splice(randomIndex, 1)[0];
-                activeCards.push(nextCard);
-
-                if (nextCard.region === 'wild') {
-                    unplayedWilds = unplayedWilds.filter(w => w.id !== nextCard.id);
-                } else {
-                    unplayedDistricts = unplayedDistricts.filter(d => d.id !== nextCard.id);
-                }
-
-                const newCardEl = createCardElement(nextCard);
-                newCardEl.style.opacity = '0';
-                document.getElementById('boardGrid').appendChild(newCardEl);
-                
-                setTimeout(() => {
-                    newCardEl.style.transition = 'all 0.4s ease';
-                    newCardEl.style.opacity = '1';
-                }, 50);
-            }
-
-            saveToLocalStorage();
-            updateStats();
-        }
-
-        function saveToLocalStorage() {
-            localStorage.setItem('sglag3_act', JSON.stringify(activeCards));
-            localStorage.setItem('sglag3_a', JSON.stringify(aCompleted));
-            localStorage.setItem('sglag3_b', JSON.stringify(bCompleted));
-            localStorage.setItem('sglag3_c', JSON.stringify(cCompleted));
-            localStorage.setItem('sglag3_wld', JSON.stringify(unplayedWilds));
-        }
-
-        function updateStats() {
-            document.getElementById('scoreA').innerText = aCompleted.length;
-            document.getElementById('scoreB').innerText = bCompleted.length;
-            document.getElementById('scoreC').innerText = cCompleted.length;
-
-            const activeDistrictCount = activeCards.filter(c => c.region !== 'wild').length;
-            const totalRemainingDistricts = unplayedDistricts.length + activeDistrictCount;
-            document.getElementById('poolDeck').innerText = totalRemainingDistricts;
-
-            const getNames = (idList) => {
-                const list = idList.map(id => {
-                    const found = allDistricts.find(d => d.id === id);
-                    return found ? found.name : id;
+            if (gameChannel && cardId) {
+                gameChannel.send({
+                    type: 'broadcast',
+                    event: 'cardFlipped',
+                    payload: { cardId: cardId }
                 });
-                return list.length > 0 ? list.join(', ') : 'None yet';
-            };
-
-            document.getElementById('logA').innerText = getNames(aCompleted);
-            document.getElementById('logB').innerText = getNames(bCompleted);
-            document.getElementById('logC').innerText = getNames(cCompleted);
-        }
-
-        function resetGame() {
-            if (confirm("Reset the scores and wipe the entire 3-team layout? This action cannot be undone.")) {
-                localStorage.removeItem('sglag3_act');
-                localStorage.removeItem('sglag3_a');
-                localStorage.removeItem('sglag3_b');
-                localStorage.removeItem('sglag3_c');
-                localStorage.removeItem('sglag3_wld');
-                loadGameState();
             }
         }
 
-        window.onload = loadGameState;
-
-if (gameChannel) {
-    gameChannel.on('broadcast', { event: 'cardFlipped' }, (response) => {
-        // Look for the card using its data-id attribute
-        const receivedCard = document.querySelector(`[data-id="${response.payload.cardId}"]`);
-        if (receivedCard) {
-            // Directly toggle the flip visually
-            receivedCard.classList.toggle('flipped'); 
+        // ⚡ BROADCAST RECEIVER (Walkie-Talkie listener)
+        if (gameChannel) {
+            gameChannel.on('broadcast', { event: 'cardFlipped' }, (response) => {
+                const receivedCard = document.querySelector(`[data-id="${response.payload.cardId}"]`);
+                if (receivedCard) {
+                    receivedCard.classList.toggle('flipped'); 
+                }
+            }).subscribe();
         }
-    }).subscribe();
-}
+
+        // Initialize the board
+        renderBoard();
     </script>
 </body>
 </html>
