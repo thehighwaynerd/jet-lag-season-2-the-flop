@@ -210,8 +210,13 @@
 const supabaseUrl = 'https://gznnedivbuuumahpxfqz.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6bm5lZGl2YnV1dW1haHB4ZnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTM0MTEsImV4cCI6MjA5NzY4OTQxMX0.P8C0Jbsw7kzk4anRajZoY3dbDV7I4LEisnsDc8QhAnY';
 const supabaseInstance = supabaseUrl && supabaseKey ? supabase.createClient(supabaseUrl, supabaseKey) : null;
-const gameChannel = supabaseInstance ? supabaseInstance.channel('singapore-flop-room') : null;
-        // ========================================================
+
+// 🟢 FORCE CONFIG: This tells Supabase to allow client-to-client broadcasting!
+const gameChannel = supabaseInstance ? supabaseInstance.channel('singapore-flop-room', {
+    config: {
+        broadcast: { self: true, ack: false }
+    }
+}) : null;        // ========================================================
         // 🛠️ DATA ARRAYS: 41 DISTRICTS (TASK CODES UPGRADED TO BACKTICKS)
         // ========================================================
         const allDistricts = [
@@ -408,12 +413,15 @@ Any rental service can complete this challenge.` },
 function toggleFlip(cardElement) {
     cardElement.classList.toggle('flipped');
 
+    // Read the custom 'data-id' attribute instead of .id
+    const cardId = cardElement.getAttribute('data-id');
+
     // Send the flip event to the cloud walkie-talkie!
-    if (gameChannel) {
+    if (gameChannel && cardId) {
         gameChannel.send({
             type: 'broadcast',
             event: 'cardFlipped',
-            payload: { cardId: cardElement.id }
+            payload: { cardId: cardId }
         });
     }
 }
@@ -594,9 +602,10 @@ function toggleFlip(cardElement) {
 
 if (gameChannel) {
     gameChannel.on('broadcast', { event: 'cardFlipped' }, (response) => {
-        const receivedCard = document.getElementById(response.payload.cardId);
+        // Look for the card using its data-id attribute
+        const receivedCard = document.querySelector(`[data-id="${response.payload.cardId}"]`);
         if (receivedCard) {
-            // Directly flip the card visually without re-triggering the click function
+            // Directly toggle the flip visually
             receivedCard.classList.toggle('flipped'); 
         }
     }).subscribe();
