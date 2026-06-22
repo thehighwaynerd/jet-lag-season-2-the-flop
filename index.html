@@ -207,10 +207,10 @@
     </footer>
 
     <script>
-const supabaseUrl = 'YOUR_SUPABASE_PROJECT_URL';
-const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
-const supabase = supabaseClient.createClient(supabaseUrl, supabaseKey);
-const gameChannel = supabase.channel('singapore-flop-room');
+const supabaseUrl = ''; // Leave empty for now
+const supabaseKey = ''; // Leave empty for now
+const supabaseInstance = supabaseUrl && supabaseKey ? supabase.createClient(supabaseUrl, supabaseKey) : null;
+const gameChannel = supabaseInstance ? supabaseInstance.channel('singapore-flop-room') : null;
         // ========================================================
         // 🛠️ DATA ARRAYS: 41 DISTRICTS (TASK CODES UPGRADED TO BACKTICKS)
         // ========================================================
@@ -406,17 +406,17 @@ Any rental service can complete this challenge.` },
         }
 
 function toggleFlip(cardElement) {
-            cardElement.classList.toggle('flipped');
+    cardElement.classList.toggle('flipped');
 
-            // 🟢 Send the flip event to the cloud walkie-talkie!
-            if (gameChannel) {
-                gameChannel.send({
-                    type: 'broadcast',
-                    event: 'cardFlipped',
-                    payload: { cardId: cardElement.id }
-                });
-            }
-        }
+    // Send the flip event to the cloud walkie-talkie!
+    if (gameChannel) {
+        gameChannel.send({
+            type: 'broadcast',
+            event: 'cardFlipped',
+            payload: { cardId: cardElement.id }
+        });
+    }
+}
         function handleClaimClick(id, team, cardElement, event) {
             if (event && event.stopPropagation) { event.stopPropagation(); } 
             else if (window.event) { window.event.cancelBubble = true; }
