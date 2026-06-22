@@ -16,12 +16,12 @@
             --accent-green: #2ed573;
             --accent-blue: #1e90ff;
             
-            /* Team Palette */
+            /* 3 Team Palette */
             --team-a: #ffa502;   /* Yellow/Orange */
             --team-b: #9b59b6;   /* Purple */
             --team-c: #ff007f;   /* Neon Pink */
 
-            /* Region Border Colors */
+            /* Region Border & Accent Colors */
             --region-west: #ffa502;      
             --region-north: #ff4757;     
             --region-central: #1e90ff;   
@@ -44,6 +44,7 @@
         header h1 span { color: var(--accent-red); }
         header p { color: var(--text-muted); font-size: 1.1rem; }
 
+        /* 3-Team Scoreboard */
         .scoreboard {
             display: flex;
             justify-content: center;
@@ -58,42 +59,44 @@
         .score-a { color: var(--team-a); }
         .score-b { color: var(--team-b); }
         .score-c { color: var(--team-c); }
-        .pool-count { color: var(--text-muted); border-left: 2px solid rgba(255,255,255,0.2); padding-left: 30px; }
 
+        /* Grid Layout */
         .district-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        .flip-card { background-color: transparent; height: 460px; perspective: 1000px; }
+        .flip-card { background-color: transparent; height: 500px; perspective: 1000px; }
         .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: left; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
         .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
         .card-front, .card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
 
-        .card-front { background-color: var(--card-bg); cursor: pointer; }
-        .map-container { width: 100%; height: 180px; background-color: #151b2d; display: flex; align-items: center; justify-content: center; overflow: hidden; border-bottom: 2px solid rgba(255, 255, 255, 0.1); }
+        .card-front { background-color: var(--card-bg); cursor: pointer; display: flex; flex-direction: column; }
+        .map-container { width: 100%; height: 160px; background-color: #151b2d; display: flex; align-items: center; justify-content: center; overflow: hidden; border-bottom: 2px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
         .map-container img { width: 100%; height: 100%; object-fit: contain; padding: 10px; box-sizing: border-box; }
 
-        .card-content { padding: 20px; }
-        .card-content h2 { font-size: 1.3rem; margin: 10px 0 5px 0; text-transform: uppercase; }
+        .card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; }
+        .card-content h2 { font-size: 1.3rem; margin: 10px 0 5px 0; text-transform: uppercase; flex-shrink: 0; }
         
+        /* Region Text Rules */
         .txt-west { color: var(--region-west); }
         .txt-north { color: var(--region-north); }
         .txt-central { color: var(--region-central); }
         .txt-northeast { color: var(--region-northeast); }
         .txt-east { color: var(--region-east); }
         .txt-sentosa { color: var(--region-sentosa); }
-        .txt-wild { color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.6); }
+        .txt-wild { color: var(--region-wild); text-shadow: 0 0 8px rgba(255,255,255,0.4); }
 
         .card-content p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin: 0; }
 
-        .badge-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+        .badge-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; flex-shrink: 0; }
         .borders-badge { background-color: rgba(255, 255, 255, 0.15); color: #fff; font-size: 0.75rem; font-weight: bold; padding: 4px 8px; border-radius: 6px; }
         .challenge-tag { background-color: var(--card-back-bg); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; max-width: 65%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+        /* Back Card Layout */
         .card-back { background-color: var(--card-back-bg); transform: rotateY(180deg); padding: 24px; box-sizing: border-box; display: flex; flex-direction: column; border: 2px solid var(--accent-red); }
         .border-west { border-color: var(--region-west); }
         .border-north { border-color: var(--region-north); }
@@ -101,27 +104,28 @@
         .border-northeast { border-color: var(--region-northeast); }
         .border-east { border-color: var(--region-east); }
         .border-sentosa { border-color: var(--region-sentosa); }
-        .border-wild { border-color: #fff; box-shadow: inset 0 0 10px rgba(255,255,255,0.1); }
+        .border-wild { border-color: var(--region-wild); }
 
-        .challenge-header { border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; margin-bottom: 15px; }
+        .challenge-header { border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; margin-bottom: 15px; flex-shrink: 0; }
         .challenge-title { font-size: 1.1rem; font-weight: bold; text-transform: uppercase; }
 
         .challenge-body { font-size: 0.9rem; line-height: 1.6; flex-grow: 1; overflow-y: auto; margin-bottom: 15px; white-space: pre-wrap; color: var(--text-muted); }
         .challenge-body strong { color: #fff; display: block; margin-bottom: 6px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .button-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: auto; }
+        /* 3-Button Layout */
+        .button-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: auto; flex-shrink: 0; }
         .team-btn { color: #fff; border: none; padding: 12px 2px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; text-align: center; }
         .btn-a { background-color: var(--team-a); color: #121824; }
         .btn-b { background-color: var(--team-b); }
         .btn-c { background-color: var(--team-c); }
-        
+        .team-btn:hover { opacity: 0.9; }
+
         footer { margin-top: 50px; text-align: center; padding-bottom: 40px; }
 
         @media (max-width: 768px) {
             .scoreboard { flex-direction: column; align-items: center; gap: 10px; }
-            .pool-count { border-left: none; padding-left: 0; }
             .button-group { grid-template-columns: 1fr; }
-            .flip-card { height: 500px; }
+            .flip-card { height: 540px; }
         }
     </style>
 </head>
@@ -129,7 +133,7 @@
 
     <header>
         <h1>The Flop Tracker: <span>Singapore Board</span></h1>
-        <p>3 Teams • 9 Synchronized Board Slots</p>
+        <p>3 Teams • Synchronized Board Grid</p>
     </header>
 
     <div class="scoreboard">
@@ -140,7 +144,11 @@
 
     <main class="district-grid" id="boardGrid"></main>
 
-<script>
+    <footer>
+        <p style="color: var(--text-muted); font-size: 0.8rem;">Real-time Connection Online</p>
+    </footer>
+
+    <script>
         // 🟢 CLOUD CONNECT CONFIGURATION
         const supabaseUrl = 'https://gznnedivbuuumahpxfqz.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6bm5lZGl2YnV1dW1haHB4ZnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTM0MTEsImV4cCI6MjA5NzY4OTQxMX0.P8C0Jbsw7kzk4anRajZoY3dbDV7I4LEisnsDc8QhAnY';
@@ -150,19 +158,18 @@
             config: { broadcast: { self: true, ack: false } }
         }) : null;
 
-        // 🌐 GLOBAL STATE SYSTEM VARIABLES (Defined first to stop "undefined" crashes)
+        // 🌐 GLOBAL STATE PLACEHOLDERS
         let aCompleted = [];
         let bCompleted = [];
         let cCompleted = [];
         let unplayedDistricts = [];
-        let unplayedWilds = [];
 
-        // 🌐 THE 9 FIXED SYNCHRONIZED STARTING CARDS
+        // 🌐 THE COMPLETE MASTER DATA DECK
         const activeCards = [
-                       // 🟠 WEST REGION
+            // 🟠 WEST REGION
             { id: "bukit-batok", name: "Bukit Batok", region: "west", borders: 6, description: "Characterised by its hilly terrain and lush green spaces. It is famous for Little Guilin (a beautiful, scenic park created from a disused granite quarry) and Bukit Batok Nature Park. It functions primarily as a peaceful, mature residential town.", image: "images/bukitbatok.png", challengeTitle: "On Time", task: `Find a bus departure that is on time.
 
-If the MyTransport app says a bus is arriving and that bus does not leave within 1 minute, the departure is not on time, and you have to redo the challenge. ` },
+If the MyTransport app says a bus is arriving and that bus does not leave within 1 minute, the departure is not on time, and you have to redo the challenge.` },
             { id: "bukit-panjang", name: "Bukit Panjang", region: "west", borders: 5, description: "A quiet, suburban residential town tucked right next to the Central Catchment Area. It features unique hilly geography and was the first town in Singapore to implement the Light Rail Transit (LRT) system to seamlessly connect its residents to the main MRT network.", image: "images/bukitpanjang.png", challengeTitle: "Joyriding", task: `Take the entire Bukit Panjang Loop via Senja.
 
 Along the journey, you have to photograph a bicycle, a red car and a convenience shop. 
@@ -171,17 +178,15 @@ You cannot get off the train to take a photo.` },
             { id: "choa-chu-kang", name: "Choa Chu Kang", region: "west", borders: 5, description: "Located in the northwestern part of the region, this former kampong and farming area has evolved into a densely populated, self-contained residential town. It is highly family-oriented, featuring extensive park connectors and the newly upgraded Choa Chu Kang Park.  ", image: "images/choachukang.png", challengeTitle: "ITE West", task: `Proudly take a photo of ITE West.` },
             { id: "clementi", name: "Clementi", region: "west", borders: 4, description: "A highly sought-after, mature residential town positioned between Jurong and the Central Region. Often dubbed an educational hub, it hosts the National University of Singapore (NUS), Ngee Ann Polytechnic, and numerous other prominent tertiary institutions. ", image: "images/clementi.png", challengeTitle: "Tertiary Education", task: `Clementi has the highest concentration of tertiary institutions in Singapore. Travel to 2 of them within 15 mins. The timer starts at the front of the first institute and ends once you arrive at the front of the next institute. 
 
-No coins are needed to complete this. You must redo this if you fail. ` },
-            { id: "jurong-east", name: "Jurong East", region: "west", borders: 5, description: "The official regional centre of the West. It is a bustling commercial hub packed with major shopping malls (like JEM and Westgate) and is central to the upcoming Jurong Lake District, which is being developed into Singapore's second Central Business District (CBD). It is also home to the scenic Jurong Lake Gardens.  ", image: "images/jurongeast.png", challengeTitle: "We Are Chinese People", task:`Find something Chinese-culture related and take a photo of it.` },
+No coins are needed to complete this. You must redo this if you fail.` },
+            { id: "jurong-east", name: "Jurong East", region: "west", borders: 5, description: "The official regional centre of the West. It is a bustling commercial hub packed with major shopping malls (like JEM and Westgate) and is central to the upcoming Jurong Lake District, which is being developed into Singapore's second Central Business District (CBD). It is also home to the scenic Jurong Lake Gardens.  ", image: "images/jurongeast.png", challengeTitle: "We Are Chinese People", task: `Find something Chinese-culture related and take a photo of it.` },
             { id: "jurong-west", name: "Jurong West", region: "west", borders: 5, description: "The most populous residential planning area in the West Region. It is a massive, mature heartland town featuring extensive public housing estates, the sprawling Jurong Point shopping mall, and the prestigious Nanyang Technological University (NTU) campus nestled in its western corner.  ", image: "images/jurongwest.png", challengeTitle: "Housing", task: `Unlike it’s neighbour Pioneer, Jurong West is the most populated town in Singapore. Find and photograph two HDB blocks that are 700 numbers apart. E.g. Block 146 and Block 912. 
 
 You can travel for free to complete this challenge.` },
             { id: "boon-lay", name: "Boon Lay", region: "west", borders: 3, description: "An area primarily dedicated to light industrial estates, corporate offices, and factories. It acts as a vital buffer zone separating the dense residential zones of Jurong West from the heavy industrial districts further out.  ", image: "images/boonlay.png", challengeTitle: "The Only Hill in the West", task: `Climb to the summit of Jurong Hill and take a photo at the top of the lookout tower.` },
             { id: "pioneer", name: "Pioneer", region: "west", borders: 4, description: "Named after the early industrial visionaries of Singapore, this area is almost entirely industrial. It forms a major backbone of the Jurong industrial estate, filled with manufacturing plants, warehouses, and engineering facilities.", image: "images/pioneer.png", challengeTitle: "Where Am I?", task: `Pioneer is known for having all its land used only for industrial factories. Therefore you need to buy a meal/drink from a store (of any kind) outside of Joo Koon Mall.` },
-            { id: "tengah", name: "Tengah", region: "west", borders: 5, description: "Singapore’s newest, fully planned residential town. Known as the Forest Town, it is being built from scratch with a heavy focus on smart, car-lite, and sustainable living, featuring a massive 5km-long ecological forest corridor.  ", image: "images/tengah.png", challengeTitle: "Car Hunting", task: `Tengah was built to be car-lite which means there will be very little amount of cars. Hunt a white, red, yellow, silver, and blue car. ` },
-            { id: "tuas", name: "Tuas", region: "west", borders: 2, description: "Situated on the extreme western tip of Singapore, Tuas is a massive powerhouse for heavy industry, global shipping, and petrochemicals. It features massive land reclamation projects and is home to the mega Tuas Port, which is progressively opening to consolidate all of Singapore's container maritime operations.  ", image: "images/tuas.png", challengeTitle: "WHERE ARE THE BIKES", task: `Find a rental bicycle in Tuas.
-
-Any rental service can complete this challenge.` },
+            { id: "tengah", name: "Tengah", region: "west", borders: 5, description: "Singapore’s newest, fully planned residential town. Known as the Forest Town, it is being built from scratch with a heavy focus on smart, car-lite, and sustainable living, featuring a massive 5km-long ecological forest corridor.  ", image: "images/tengah.png", challengeTitle: "Car Hunting", task: `Tengah was built to be car-lite which means there will be very little amount of cars. Hunt a white, red, yellow, silver, and blue car.` },
+            { id: "tuas", name: "Tuas", region: "west", borders: 2, description: "Situated on the extreme western tip of Singapore, Tuas is a massive powerhouse for heavy industry, global shipping, and petrochemicals. It features massive land reclamation projects and is home to the mega Tuas Port, which is progressively opening to consolidate all of Singapore's container maritime operations.  ", image: "images/tuas.png", challengeTitle: "WHERE ARE THE BIKES", task: `Find a rental bicycle in Tuas. Any rental service can complete this challenge.` },
             { id: "western-islands", name: "Western Water Catchment", region: "west", borders: 7, description: "The largest planning area by land size in the West, though it has almost no permanent resident population. It contains four major reservoirs (Tengeh, Poyan, Murai, and Sarimbun) and functions primarily as a crucial water catchment area and a restricted live-firing training ground for the Singapore Armed Forces.  ", image: "images/westernwatercatchment.png", challengeTitle: "Fresh Water", task: `Drink fresh tap water or fountain water.` },
 
             // 🔴 NORTH REGION
@@ -234,22 +239,19 @@ Any rental service can complete this challenge.` },
             { id: "wild-4", name: "✨ WILD CARD", region: "wild", borders: 0, description: "Complete the challenge below to claim 2 districts of your choice!", image: "images/wild.png", challengeTitle: "Double Claim: Choice D", task: `something` }
         ];
 
-        // Placeholder stats function to prevent layout crashes if scoreboard calls it
-        function updateStats() {
-            console.log("Stats synced successfully!");
-        }
-
-        // RENDER THE FIXED BOARD RIGHT AWAY
+        // RENDER THE MATRIX BOARD (Shows the first 9 elements of your array synchronously)
         function renderBoard() {
             const boardGrid = document.getElementById('boardGrid');
             if (!boardGrid) return;
             boardGrid.innerHTML = ''; 
 
-            activeCards.forEach(cardData => {
+            // Slice out the first 9 elements to create the uniform starter layout
+            const startingNine = activeCards.slice(0, 9);
+
+            startingNine.forEach(cardData => {
                 const cardHTML = createCardElement(cardData);
                 boardGrid.appendChild(cardHTML);
             });
-            updateStats();
         }
 
         function createCardElement(data) {
@@ -294,7 +296,7 @@ Any rental service can complete this challenge.` },
             return cardEl;
         }
 
-        // ⚡ BROADCAST SENDER
+        // ⚡ BROADCAST SIGNAL SENDER
         function toggleFlip(cardElement) {
             cardElement.classList.toggle('flipped');
             const cardId = cardElement.getAttribute('data-id');
@@ -308,7 +310,7 @@ Any rental service can complete this challenge.` },
             }
         }
 
-        // ⚡ BROADCAST RECEIVER
+        // ⚡ BROADCAST SIGNAL LISTENER (Real-time tracking)
         if (gameChannel) {
             gameChannel.on('broadcast', { event: 'cardFlipped' }, (response) => {
                 const receivedCard = document.querySelector(`[data-id="${response.payload.cardId}"]`);
@@ -318,7 +320,7 @@ Any rental service can complete this challenge.` },
             }).subscribe();
         }
 
-        // Initialize the board
+        // Run setup sequence immediately on screen startup
         renderBoard();
     </script>
 </body>
