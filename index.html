@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -206,6 +207,10 @@
     </footer>
 
     <script>
+const supabaseUrl = 'YOUR_SUPABASE_PROJECT_URL';
+const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+const supabase = supabaseClient.createClient(supabaseUrl, supabaseKey);
+const gameChannel = supabase.channel('singapore-flop-room');
         // ========================================================
         // 🛠️ DATA ARRAYS: 41 DISTRICTS (TASK CODES UPGRADED TO BACKTICKS)
         // ========================================================
@@ -400,10 +405,18 @@ Any rental service can complete this challenge.` },
             return cardEl;
         }
 
-        function toggleFlip(cardElement) {
+function toggleFlip(cardElement) {
             cardElement.classList.toggle('flipped');
-        }
 
+            // 🟢 Send the flip event to the cloud walkie-talkie!
+            if (gameChannel) {
+                gameChannel.send({
+                    type: 'broadcast',
+                    event: 'cardFlipped',
+                    payload: { cardId: cardElement.id }
+                });
+            }
+        }
         function handleClaimClick(id, team, cardElement, event) {
             if (event && event.stopPropagation) { event.stopPropagation(); } 
             else if (window.event) { window.event.cancelBubble = true; }
@@ -578,6 +591,16 @@ Any rental service can complete this challenge.` },
         }
 
         window.onload = loadGameState;
+
+        if (gameChannel) {
+            gameChannel.on('broadcast', { event: 'cardFlipped' }, (response) => {
+                const receivedCard = document.getElementById(response.payload.cardId);
+                if (receivedCard) {
+                    // This forces your screen to toggle the flip without a mouse click
+                    receivedCard.classList.toggle('flipped'); 
+                }
+            }).subscribe();
+        }
     </script>
 </body>
 </html>
